@@ -8,6 +8,7 @@ pub enum EzyTutorError {
     DBError(String),
     ActixError(String),
     NotFound(String),
+    InvalidInput(String),
 }
 
 #[derive(Debug, Serialize)]
@@ -26,6 +27,10 @@ impl EzyTutorError {
                 println!("Server error occurred: {:?}", msg);
                 "Internal server error".into()
             }
+            EzyTutorError::InvalidInput(msg) => {
+                println!("Invalid parameters received: {:?}", msg);
+                msg.into()
+            }
             EzyTutorError::NotFound(msg) => {
                 println!("Not found error occurred: {:?}", msg);
                 msg.into()
@@ -40,6 +45,7 @@ impl error::ResponseError for EzyTutorError {
             EzyTutorError::DBError(_msg) | EzyTutorError::ActixError(_msg) => {
                 StatusCode::INTERNAL_SERVER_ERROR
             }
+            EzyTutorError::InvalidInput(_msg) => StatusCode::BAD_REQUEST,
             EzyTutorError::NotFound(_msg) => StatusCode::NOT_FOUND,
         }
     }

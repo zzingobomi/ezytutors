@@ -6,4 +6,4 @@ edition = "2021"
 [dependencies]
 
 [workspace]
-members = ["tutor-nodb", "tutor-db"]
+members = ["tutor-nodb", "tutor-web-service", "tutor-web-app-ssr"]
