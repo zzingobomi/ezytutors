@@ -1,6 +1,10 @@
-use std::env;
 use actix_files as fs;
-use actix_web::{error, web::{self, Data}, App, Error, HttpResponse, HttpServer, Result};
+use actix_web::{
+    error,
+    web::{self, Data},
+    App, Error, HttpResponse, HttpServer, Result,
+};
+use std::env;
 use tera::Tera;
 
 async fn index(tmpl: web::Data<tera::Tera>) -> Result<HttpResponse, Error> {
