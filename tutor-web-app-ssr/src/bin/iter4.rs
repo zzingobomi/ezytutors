@@ -7,33 +7,33 @@ use actix_web::{
 use serde::{Deserialize, Serialize};
 use std::env;
 use tera::Tera;
+use awc::Client;
 
 #[derive(Serialize, Deserialize)]
 pub struct Tutor {
-    name: String
+    pub tutor_id: i32,
+    pub tutor_name: String,
+    pub tutor_pic_url: String,
+    pub tutor_profile: String
 }
 
 async fn handle_get_tutors(tmpl: web::Data<tera::Tera>) -> Result<HttpResponse, Error> {
-    let tutors: Vec<Tutor> = vec![
-        Tutor {
-            name: String::from("Tutor 1")
-        },
-        Tutor {
-            name: String::from("Tutor 2")
-        },
-        Tutor {
-            name: String::from("Tutor 3")
-        },
-        Tutor {
-            name: String::from("Tutor 4")
-        },
-        Tutor {
-            name: String::from("Tutor 5")
-        },
-    ];
+    let client = Client::new();
+
+    let response = client
+        .get("http://localhost:3000/tutors/")
+        .send()
+        .await
+        .unwrap()
+        .body()
+        .await
+        .unwrap();
+
+    let str_list = std::str::from_utf8(&response.as_ref()).unwrap();
+    let tutor_list: Vec<Tutor> = serde_json::from_str(str_list).unwrap();
     let mut ctx = tera::Context::new();
-    ctx.insert("tutors", &tutors);
-    ctx.insert("text", &"List of all tutors!".to_owned());
+
+    ctx.insert("tutors", &tutor_list);    
     let s = tmpl
         .render("list.html", &ctx)
         .map_err(|_| error::ErrorInternalServerError("Template error"))?;
