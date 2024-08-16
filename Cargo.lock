@@ -2271,6 +2271,7 @@ dependencies = [
  "actix-web",
  "awc",
  "dotenv",
+ "openssl",
  "rust-argon2",
  "serde",
  "serde_json",

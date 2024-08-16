@@ -87,12 +87,13 @@ mod tests {
     #[actix_rt::test]
     async fn handle_post_1_integration_test() {
         let tera = Tera::new(concat!(env!("CARGO_MANIFEST_DIR"), "/static/iter2/**/*")).unwrap();
-        let app = test::init_service(App::new().app_data(Data::new(tera)).configure(app_config)).await;
+        let app =
+            test::init_service(App::new().app_data(Data::new(tera)).configure(app_config)).await;
 
         let req = test::TestRequest::post()
             .uri("/tutors")
             .set_form(&Tutor {
-                name: "Terry".to_string()
+                name: "Terry".to_string(),
             })
             .to_request();
         let resp: ServiceResponse = app.call(req).await.unwrap();

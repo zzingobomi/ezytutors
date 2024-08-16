@@ -10,25 +10,25 @@ use tera::Tera;
 
 #[derive(Serialize, Deserialize)]
 pub struct Tutor {
-    name: String
+    name: String,
 }
 
 async fn handle_get_tutors(tmpl: web::Data<tera::Tera>) -> Result<HttpResponse, Error> {
     let tutors: Vec<Tutor> = vec![
         Tutor {
-            name: String::from("Tutor 1")
+            name: String::from("Tutor 1"),
         },
         Tutor {
-            name: String::from("Tutor 2")
+            name: String::from("Tutor 2"),
         },
         Tutor {
-            name: String::from("Tutor 3")
+            name: String::from("Tutor 3"),
         },
         Tutor {
-            name: String::from("Tutor 4")
+            name: String::from("Tutor 4"),
         },
         Tutor {
-            name: String::from("Tutor 5")
+            name: String::from("Tutor 5"),
         },
     ];
     let mut ctx = tera::Context::new();
@@ -56,4 +56,3 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-

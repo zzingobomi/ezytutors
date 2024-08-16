@@ -1,8 +1,8 @@
-use super::{
+use crate::iter6::state::AppState;
+use crate::{
     dbaccess::{get_user_record, post_new_user},
     errors::EzyTutorError,
-    model::{TutorRegisterForm, TutorResponse, User},
-    state::AppState,
+    model::{TutorRegisterForm, TutorResponse, User, TutorSigninForm},
 };
 use actix_web::{web, Error, HttpResponse, Result};
 use argon2::{self, Config};
@@ -87,4 +87,24 @@ pub async fn handle_register(
     }
 
     Ok(HttpResponse::Ok().content_type("text/html").body(s))
+}
+
+pub async fn show_signin_form(tmpl: web::Data<tera::Tera>) -> Result<HttpResponse, Error> {
+    let mut ctx = tera::Context::new();
+    ctx.insert("error", "");
+    ctx.insert("current_name", "");
+    ctx.insert("current_password", "");
+    let s = tmpl
+        .render("signin.html", &ctx)
+        .map_err(|_| EzyTutorError::TeraError("Template error".to_string()))?;
+
+    Ok(HttpResponse::Ok().content_type("text/html").body(s))
+}
+
+pub async fn handle_signin(
+    tmpl: web::Data<tera::Tera>,
+    app_state: web::Data<AppState>,
+    params: web::Form<TutorSigninForm>,
+) -> Result<HttpResponse, Error> {
+    Ok(HttpResponse::Ok().finish())
 }

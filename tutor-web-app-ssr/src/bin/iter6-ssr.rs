@@ -1,11 +1,11 @@
-#[path = "../iter5/mod.rs"]
-mod iter5;
+#[path = "../iter6/mod.rs"]
+mod iter6;
 use actix_web::{
     web::{self, Data},
     App, HttpServer,
 };
 use dotenv::dotenv;
-use iter5::{dbaccess, errors, handler, model, routes, state::AppState};
+use iter6::{dbaccess, errors, handler, model, routes, state::AppState};
 use routes::app_config;
 use sqlx::postgres::PgPool;
 use std::env;
@@ -21,7 +21,7 @@ async fn main() -> std::io::Result<()> {
     let shared_data = web::Data::new(AppState { db: db_pool });
 
     HttpServer::new(move || {
-        let tera = Tera::new(concat!(env!("CARGO_MANIFEST_DIR"), "/static/iter5/**/*")).unwrap();
+        let tera = Tera::new(concat!(env!("CARGO_MANIFEST_DIR"), "/static/iter6/**/*")).unwrap();
 
         App::new()
             .app_data(Data::new(tera))

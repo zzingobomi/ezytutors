@@ -4,17 +4,17 @@ use actix_web::{
     web::{self, Data},
     App, Error, HttpResponse, HttpServer, Result,
 };
+use awc::Client;
 use serde::{Deserialize, Serialize};
 use std::env;
 use tera::Tera;
-use awc::Client;
 
 #[derive(Serialize, Deserialize)]
 pub struct Tutor {
     pub tutor_id: i32,
     pub tutor_name: String,
     pub tutor_pic_url: String,
-    pub tutor_profile: String
+    pub tutor_profile: String,
 }
 
 async fn handle_get_tutors(tmpl: web::Data<tera::Tera>) -> Result<HttpResponse, Error> {
@@ -33,7 +33,7 @@ async fn handle_get_tutors(tmpl: web::Data<tera::Tera>) -> Result<HttpResponse, 
     let tutor_list: Vec<Tutor> = serde_json::from_str(str_list).unwrap();
     let mut ctx = tera::Context::new();
 
-    ctx.insert("tutors", &tutor_list);    
+    ctx.insert("tutors", &tutor_list);
     let s = tmpl
         .render("list.html", &ctx)
         .map_err(|_| error::ErrorInternalServerError("Template error"))?;
@@ -56,4 +56,3 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-
